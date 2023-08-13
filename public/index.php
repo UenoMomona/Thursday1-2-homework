@@ -45,11 +45,17 @@ try{
 }
 
 ?>
+
+<!DOCTYPE HTML>
+<head>
+</head>
+<body>
 <h1>Web掲示板</h1>
 <form method="POST" action="./index.php" enctype="multipart/form-data">
-<textarea name="body" placeholder="掲示板に書き込もう！"></textarea>
+<textarea name="body" placeholder="掲示板に書き込もう！"></textarea><br>
+<div id="warning"></div>
 <input type="file" accept="image/*" name="image" id="file">
-<button type="submit">投稿</button>
+<button type="submit" id="submit">投稿</button>
 </form>
 
 <?php foreach($select as $post): ?>
@@ -63,3 +69,23 @@ try{
   </dd>
 </dl>
 <?php endforeach ?>
+
+<!-- <script src="./script.js"></script> --!>
+<script>
+  const file = document.getElementById('file');
+  const warning = document.getElementById('warning');
+  const submit = document.getElementById('submit');
+
+  file.addEventListener('change', function(e){
+    var fileList = e.target.files;
+    if( fileList[0].size / 1024 ** 2 > 5){
+      warning.innerText = "最大5MBまで！";
+      submit.disabled = true;
+    }else{
+      warning.innerText = "";
+      submit.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
