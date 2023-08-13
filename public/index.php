@@ -35,7 +35,7 @@ try{
     header("Location: ./index.php");
     return;
   }
-  $sql = 'SELECT * FROM `posts`;';
+  $sql = 'SELECT * FROM `posts` ORDER BY `id` DESC;';
   $select = $dbh->prepare($sql);
   $select->execute();
 
