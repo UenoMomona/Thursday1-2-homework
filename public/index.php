@@ -56,7 +56,7 @@ try{
 <dl>
   <dt><?= $post['id'] ?></dt>
   <dd><?= $post['created_at'] ?> </dd>
-  <dd><?= nl2br(htmlspecialchars($post['body'])) ?>
+  <dd><?= nl2br(htmlspecialchars($post['body'])) ?><br>
     <?php if(!empty($post['image_filename'])): ?>
     <img src="/image/<?=$post['image_filename'] ?>" style="max-height: 10em;">
     <?php endif; ?>
