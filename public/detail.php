@@ -24,6 +24,12 @@ try{
     $pre->bindValue(':id', $id);
     $pre->execute();
     $result = $pre->fetch(PDO::FETCH_ASSOC);
+
+    $sql = 'SELECT * FROM posts WHERE reply_to = :reply_to;';
+    $pre = $dbh->prepare($sql);
+    $pre->bindValue(':reply_to', $id);
+    $pre->execute();
+    $replyPosts = $pre->fetchAll();
   }
 
 }catch(Throwable $e){
@@ -39,7 +45,7 @@ try{
 <head>
 </head>
 <body>
-<h1>Web掲示板</h1>
+<h1><a href="./index.php">Web掲示板</a></h1>
 <dl>
   <dt><?= $result['id'] ?></dt>
   <dd><?= $result['created_at'] ?> </dd>
@@ -55,3 +61,14 @@ try{
   <input type="hidden" value='<?= $id ?>' name="id">
   <button type="submit">投稿</button>
 </form>
+<h2>コメント</h2>
+<?php if(!empty($replyPosts)): ?>
+  <?php foreach($replyPosts as $reply): ?>
+    <dl>
+      <dt><a href="./detail.php?id=<?= $reply['id'] ?>"><?= $reply['id'] ?></a></dt>
+      <dd><?= $reply['created_at'] ?> </dd>
+      <dd><?= nl2br(htmlspecialchars($reply['body'])) ?></dd>
+    </dl>
+  <?php endforeach; ?>
+<?php endif; ?>
+<a href="./index.php">TOPへ</a>
