@@ -60,7 +60,12 @@ try{
 
 <?php foreach($select as $post): ?>
 <dl>
-  <dt><?= $post['id'] ?></dt>
+  <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a><br>
+  <?php if(!empty($post['reply_to'])): ?>
+  <a href="./detail.php?id=<?= $post['reply_to'] ?>">＞＞<?= $post['reply_to'] ?></a>
+  <?php endif ?>
+  </dt>
+  
   <dd><?= $post['created_at'] ?> </dd>
   <dd><?= nl2br(htmlspecialchars($post['body'])) ?><br>
     <?php if(!empty($post['image_filename'])): ?>
