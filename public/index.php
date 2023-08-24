@@ -48,32 +48,42 @@ try{
 
 <!DOCTYPE HTML>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./css/style.css" rel="stylesheet">
 </head>
 <body>
 <h1>Web掲示板</h1>
-<form method="POST" action="./index.php" enctype="multipart/form-data">
-<textarea name="body" placeholder="掲示板に書き込もう！"></textarea><br>
-<div id="warning"></div>
-<input type="file" accept="image/*" name="image" id="file">
-<button type="submit" id="submit">投稿</button>
-</form>
+<div class="wrapper">
+  <div class="newPost">
+    <form method="POST" action="./index.php" enctype="multipart/form-data">
+      <textarea name="body" placeholder="掲示板に書き込もう！"></textarea><br>
+      <div id="warning"></div>
+      <input type="file" accept="image/*" name="image" id="file">
+      <button type="submit" id="submit">投稿</button>
+    </form>
+  </div> <!-- newPost --!>
 
-<?php foreach($select as $post): ?>
-<dl>
-  <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a><br>
-  <?php if(!empty($post['reply_to'])): ?>
-  <a href="./detail.php?id=<?= $post['reply_to'] ?>">＞＞<?= $post['reply_to'] ?></a>
-  <?php endif ?>
-  </dt>
+  <div class="posts">
+
+    <?php foreach($select as $post): ?>
+    <dl>
+      <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a>  
+      <?php if(!empty($post['reply_to'])): ?>
+        <a href="./detail.php?id=<?= $post['reply_to'] ?>">＞＞<?= $post['reply_to'] ?></a>
+      <?php endif ?>
+      </dt>
   
-  <dd><?= $post['created_at'] ?> </dd>
-  <dd><?= nl2br(htmlspecialchars($post['body'])) ?><br>
-    <?php if(!empty($post['image_filename'])): ?>
-    <img src="/image/<?=$post['image_filename'] ?>" style="max-height: 10em;">
-    <?php endif; ?>
-  </dd>
-</dl>
-<?php endforeach ?>
+      <dd class="time"><?= $post['created_at'] ?> </dd>
+      <dd><?= nl2br(htmlspecialchars($post['body'])) ?><br>
+        <?php if(!empty($post['image_filename'])): ?>
+          <img src="/image/<?=$post['image_filename'] ?>" style="max-height: 10em;">
+        <?php endif; ?>
+      </dd>
+    </dl>
+    <?php endforeach ?>
+   </div> <!-- posts --!>
+</div> <!-- wrapper --!>
+
 
 <!-- <script src="./script.js"></script> --!>
 <script>

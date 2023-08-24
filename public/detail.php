@@ -43,32 +43,42 @@ try{
 
 <!DOCTYPE HTML>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./css/style.css" rel="stylesheet">
 </head>
 <body>
 <h1><a href="./index.php">Web掲示板</a></h1>
-<dl>
-  <dt><?= $result['id'] ?></dt>
-  <dd><?= $result['created_at'] ?> </dd>
-  <dd><?= nl2br(htmlspecialchars($result['body'])) ?></dd>
-  <dd>
-  <?php if(!empty($result['image_filename'])): ?>
-  <img src="/image/<?= $result['image_filename'] ?>" style="max-height: 10em;">
-  <?php endif; ?>
-  </dd>
-</dl>
-<form  method="POST" action="./detail.php" enctype="multipart/form-data">
-  <textarea name="body" placeholder="コメントをしよう！"></textarea>
-  <input type="hidden" value='<?= $id ?>' name="id">
-  <button type="submit">投稿</button>
-</form>
+<div class="wrapper">
+  <div class="post">
+    <dl>
+      <dt><?= $result['id'] ?></dt>
+      <dd class="time"><?= $result['created_at'] ?> </dd>
+      <dd><?= nl2br(htmlspecialchars($result['body'])) ?></dd>
+      <dd>
+        <?php if(!empty($result['image_filename'])): ?>
+          <img src="/image/<?= $result['image_filename'] ?>" style="max-height: 10em;">
+        <?php endif; ?>
+      </dd>
+    </dl>
+  </div> <!-- posts --!>
+
+<div class="newPost">
+  <form  method="POST" action="./detail.php" enctype="multipart/form-data">
+    <textarea name="body" placeholder="コメントをしよう！"></textarea>
+    <input type="hidden" value='<?= $id ?>' name="id">
+    <button type="submit">投稿</button>
+  </form>
+</div> <!-- newPost --!>
 <h2>コメント</h2>
+<div class="posts">
 <?php if(!empty($replyPosts)): ?>
   <?php foreach($replyPosts as $reply): ?>
     <dl>
       <dt><a href="./detail.php?id=<?= $reply['id'] ?>"><?= $reply['id'] ?></a></dt>
-      <dd><?= $reply['created_at'] ?> </dd>
+      <dd class="time"><?= $reply['created_at'] ?> </dd>
       <dd><?= nl2br(htmlspecialchars($reply['body'])) ?></dd>
     </dl>
   <?php endforeach; ?>
 <?php endif; ?>
+</div> <!-- posts --!>
 <a href="./index.php">TOPへ</a>
