@@ -35,9 +35,25 @@ try{
     header("Location: ./index.php");
     return;
   }
-  $sql = 'SELECT * FROM `posts` ORDER BY `id` DESC;';
+
+  if(!empty($_GET['page']) && intval($_GET['page']) !== 0){
+    $page = intval($_GET['page']);
+  }else{
+    $page = 1;
+  }
+
+  $offset_num = ($page - 1) * 10;
+  $sql = 'SELECT * FROM `posts` ORDER BY `id` DESC LIMIT 11 OFFSET :num;';
   $select = $dbh->prepare($sql);
+  $select->bindParam(':num', $offset_num, PDO::PARAM_INT);
   $select->execute();
+  $data = $select->fetchAll();
+
+  if(count($data) === 11){
+    $limit = 10;
+  }else{
+    $limit = count($data);
+  }
 
 }catch(Throwable $e){
   echo $e->getMessage();
@@ -63,9 +79,21 @@ try{
     </form>
   </div> <!-- newPost --!>
 
+  <div class="page">
+    <?php if($page !== 1): ?>
+      <a href="./index.php?page=<?= $page - 1 ?>" class="before">前のページへ</a>
+    <?php else: ?>
+      <div class="before"></div>
+    <?php endif ?>
+    <?php if(count($data) === 11): ?>
+      <a href="./index.php?page=<?= $page + 1 ?>" class="after">次のページへ</a>
+    <?php else: ?>
+      <div class="after"></div>
+    <?php endif ?>
+  </div> <!-- page --!>
   <div class="posts">
 
-    <?php foreach($select as $post): ?>
+    <?php foreach($data as $post): ?>
     <dl>
       <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a>  
       <?php if(!empty($post['reply_to'])): ?>
