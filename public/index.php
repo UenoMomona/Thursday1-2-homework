@@ -81,12 +81,17 @@ try{
 
   <div class="page">
     <?php if($page !== 1): ?>
-      <a href="./index.php?page=<?= $page - 1 ?>" class="before">前のページへ</a>
+      <div class="before">
+        <a href="./index.php?page=<?= $page - 1 ?>">前のページへ</a>
+      </div>
     <?php else: ?>
       <div class="before"></div>
     <?php endif ?>
+    <div class="now">--- <?= $page ?>ページ ---</div>
     <?php if(count($data) === 11): ?>
-      <a href="./index.php?page=<?= $page + 1 ?>" class="after">次のページへ</a>
+      <div class="after">
+        <a href="./index.php?page=<?= $page + 1 ?>">次のページへ</a>
+      </div>
     <?php else: ?>
       <div class="after"></div>
     <?php endif ?>
