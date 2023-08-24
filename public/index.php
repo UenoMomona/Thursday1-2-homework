@@ -98,7 +98,8 @@ try{
   </div> <!-- page --!>
   <div class="posts">
 
-    <?php foreach($data as $post): ?>
+    <?php for($i = 0; $i < $limit; $i++): ?>
+    <?php $post = $data[$i]; ?>
     <dl>
       <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a>  
       <?php if(!empty($post['reply_to'])): ?>
@@ -113,7 +114,7 @@ try{
         <?php endif; ?>
       </dd>
     </dl>
-    <?php endforeach ?>
+    <?php endfor ?>
    </div> <!-- posts --!>
 </div> <!-- wrapper --!>
 
