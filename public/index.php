@@ -119,8 +119,6 @@ try{
    </div> <!-- posts --!>
 </div> <!-- wrapper --!>
 
-
-<!-- <script src="./script.js"></script> --!>
 <script>
   const file = document.getElementById('file');
   const warning = document.getElementById('warning');
