@@ -82,4 +82,4 @@ try{
   <?php endforeach; ?>
 <?php endif; ?>
 </div> <!-- posts --!>
-<a href="./index.php">TOPへ</a>
+<a class="to_top"href="./index.php">TOPへ</a>
