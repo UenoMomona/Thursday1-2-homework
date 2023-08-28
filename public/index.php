@@ -66,6 +66,7 @@ try{
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./css/style.css" rel="stylesheet">
+  <link href="./css/style-min.css" rel="stylesheet" media="screen and (max-width: 480px)">
 </head>
 <body>
 <h1>Web掲示板</h1>

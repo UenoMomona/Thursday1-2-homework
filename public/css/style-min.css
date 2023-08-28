@@ -1,0 +1,9 @@
+div {
+  font-size: 10px;
+}
+button {
+  font-size: 10px;
+}
+.newPost input[type="file"]::file-selector-button {
+  font-size: 10px;
+}

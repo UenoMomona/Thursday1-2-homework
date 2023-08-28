@@ -45,13 +45,12 @@ dd.time {
 }
 .newPost button{
   display: block;
-  width: 100px;
   margin-left: auto;
   border: 2px dashed #004d25;
   background-color: #bee0c2;
   cursor: pointer;
   border-radius: 5px;
-  padding: 5px 0;
+  padding: 5px 20px;
 }
 .newPost button:hover {
   border: 2px solid #004d25;

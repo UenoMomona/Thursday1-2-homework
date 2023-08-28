@@ -3,7 +3,7 @@ try{
 
   $dbh = new PDO('mysql:host=mysql;dbname=techc', 'root', '');
   
-  if(isset($_POST['body'])){
+  if(!empty($_POST['body'])){
     $sql = 'INSERT INTO `posts` (`reply_to`, `body`) VALUES (:reply_to, :body);';
     $pre = $dbh->prepare($sql);
     $pre->bindValue(':reply_to', $_POST['id']);
@@ -33,8 +33,8 @@ try{
   }
 
 }catch(Throwable $e){
-  //header("HTTP/1.1 302 Found");
-  //header("Location: ./index.php");
+  header("HTTP/1.1 302 Found");
+  header("Location: ./index.php");
   echo $e;
   return;
 }
@@ -45,6 +45,7 @@ try{
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./css/style.css" rel="stylesheet">
+  <link href="./css/style-min.css" rel="stylesheet" media="screen and (max-width: 480px)">
 </head>
 <body>
 <h1><a href="./index.php">Web掲示板</a></h1>
