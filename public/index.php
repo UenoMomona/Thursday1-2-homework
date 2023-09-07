@@ -169,6 +169,18 @@ document.addEventListener("DOMContentLoaded", () => {
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
         imageBase64Input.value = canvas.toDataURL('image/jpeg', 0.9);
+
+        // 選んだ画像を確認用に表示する
+        const preview = document.createElement('p');
+        preview.textContent = 'プレビュー：';
+        const confirmCanvas = document.createElement('canvas');
+        canvas.after(preview);
+        preview.after(confirmCanvas);
+        const maxHeight = 160
+        confirmCanvas.height = maxHeight;
+        confirmCanvas.width = maxHeight * originalWidth / originalHeight;
+        const confirmContext = confirmCanvas.getContext('2d');
+        confirmContext.drawImage(image, 0, 0, confirmCanvas.width, confirmCanvas.height);
       };
       image.src = reader.result;
     };
