@@ -60,6 +60,15 @@ try{
   return;
 }
 
+function bodyFilter(string $body): string {
+  $body = htmlspecialchars($body);
+  $body = nl2br($body);
+
+  $body = preg_replace('/&gt;&gt;(\d+)/', '<a href="./detail.php?id=$1">&gt;&gt;$1</a>', $body);
+
+  return $body;
+}
+
 ?>
 
 <!DOCTYPE HTML>
@@ -104,12 +113,12 @@ try{
     <dl>
       <dt><a href="./detail.php?id=<?= $post['id'] ?>"><?= $post['id'] ?></a>  
       <?php if(!empty($post['reply_to'])): ?>
-        <a href="./detail.php?id=<?= $post['reply_to'] ?>">＞＞<?= $post['reply_to'] ?></a>
+        <a href="./detail.php?id=<?= $post['reply_to'] ?>">&gt;&gt;<?= $post['reply_to'] ?></a>
       <?php endif ?>
       </dt>
   
       <dd class="time"><?= $post['created_at'] ?> </dd>
-      <dd><?= nl2br(htmlspecialchars($post['body'])) ?><br>
+      <dd><?= bodyFilter($post['body']); ?><br>
         <?php if(!empty($post['image_filename'])): ?>
           <img src="/image/<?=$post['image_filename'] ?>" style="max-height: 10em;">
         <?php endif; ?>
