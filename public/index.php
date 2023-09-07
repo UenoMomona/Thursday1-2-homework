@@ -7,22 +7,18 @@ try{
     
     $image_filename = null;
 
-    if (isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])) {
-     // var_dump($_FILES);
-     // return;
-      $pre_filepath = $_FILES['image']['tmp_name'];
-      if (preg_match('/^image\//', mime_content_type($pre_filepath)) !==1 ) {
-        //アップロードされたものが画像でなかった時 
-        header("HTTP/1.1 302 Found");   
-        header("Location: ./index.php");
-        return;
-      }
+    if( !empty($_POST['image_base64'])){
+      // 先頭の部分をちょっと削る
+      $base64 = preg_replace('/^data:.+base64,/', '', $_POST['image_base64']);
 
-      $pathinfo = pathinfo($_FILES['image']['name']);
-      $extension = $pathinfo['extension'];
-      $image_filename = strval(time()) . bin2hex(random_bytes(25)). '.' . $extension;
+      // base64からバイナリにデコードする
+      $image_binary = base64_decode($base64);
+
+      //新しいファイル名を決めて、バイナリを出力する
+      $image_filename = strval(time()) . bin2hex(random_bytes(25)) . '.jpg';
+
       $filepath = '/var/www/upload/image/' . $image_filename;
-      move_uploaded_file($_FILES['image']['tmp_name'], $filepath);
+      file_put_contents( $filepath, $image_binary);
     }
 
     $sql = 'INSERT INTO `posts` (`body`, `image_filename`) VALUES (:body, :image_filename);';
@@ -81,10 +77,14 @@ function bodyFilter(string $body): string {
 <h1>Web掲示板</h1>
 <div class="wrapper">
   <div class="newPost">
-    <form method="POST" action="./index.php" enctype="multipart/form-data">
+    <form method="POST" action="./index.php">
       <textarea name="body" placeholder="掲示板に書き込もう！"></textarea><br>
       <div id="warning"></div>
       <input type="file" accept="image/*" name="image" id="file">
+      <!-- base64を送るよう -->
+      <input id="imageBase64Input" type="hidden" name="image_base64">
+      <!-- 画像縮小用 -->
+      <canvas id="imageCanvas" style="display: none;"></canvas>
       <button type="submit" id="submit">投稿</button>
     </form>
   </div> <!-- newPost --!>
@@ -129,20 +129,53 @@ function bodyFilter(string $body): string {
 </div> <!-- wrapper --!>
 
 <script>
-  const file = document.getElementById('file');
-  const warning = document.getElementById('warning');
-  const submit = document.getElementById('submit');
-
-  file.addEventListener('change', function(e){
-    var fileList = e.target.files;
-    if( fileList[0].size / 1024 ** 2 > 5){
-      warning.innerText = "最大5MBまで！";
-      submit.disabled = true;
-    }else{
-      warning.innerText = "";
-      submit.disabled = false;
+document.addEventListener("DOMContentLoaded", () => {
+  const ImageInput = document.getElementById('file');
+  ImageInput.addEventListener("change", () => {
+    const file = ImageInput.files[0];
+    if(!file.type.startsWith('image/')){
+      //画像ではなかった時
+      return;
     }
+
+    const imageBase64Input = document.getElementById("imageBase64Input");
+    const canvas = document.getElementById("imageCanvas");
+    const reader = new FileReader();
+    const image = new Image();
+
+    reader.onload = () => {
+      image.onload = () => {
+
+        // 元画像の大きさを取得
+        const originalWidth = image.naturalWidth;
+        const originalHeight = image.naturalHeight;
+
+        const maxLength = 2000;
+
+        if( originalWidth <= maxLength && originalHeight <= maxLength ){
+          //どちらも許容サイズ以内の場合そのまま
+          canvas.width = originalWidth;
+          canvas.height = originalHeight;
+        } else if (originalWidth > originalHeight){
+          // 画像が横長の場合
+          canvas.width = maxLength;
+          canvas.height = maxLength * originalHeight / originalWidth;
+        } else {
+          canvas.width = maxLength * originalWidth / originalHeight;
+          canvas.height = maxLength;
+        }
+
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        imageBase64Input.value = canvas.toDataURL('image/jpeg', 0.9);
+      };
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
   });
+  console.log(imageBase64Input.value);
+});
 </script>
 </body>
 </html>
