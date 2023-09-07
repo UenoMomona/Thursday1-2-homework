@@ -8,7 +8,7 @@ $(function(){
 
     $('#bg, #photo').fadeIn();
     var height = Number($('#photo img').css('height').slice(0,-2));
-    var max_height = Number($('body').css('height').slice(0,-2));
+    var max_height = Number($(window).height().slice(0,-2));
     // とりあえず縦が画面に収まるようにする
     $('#photo img').css('width', 'auto').css('height', max_height * 0.9 + 'px');
 
