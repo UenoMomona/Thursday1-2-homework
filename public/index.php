@@ -85,6 +85,10 @@ function bodyFilter(string $body): string {
       <input id="imageBase64Input" type="hidden" name="image_base64">
       <!-- 画像縮小用 -->
       <canvas id="imageCanvas" style="display: none;"></canvas>
+      <div id="previews" style="display: none;">
+        <p>プレビュー：</p>
+        <canvas id="confirmCanvas"></canvas>
+      </div>
       <button type="submit" id="submit">投稿</button>
     </form>
   </div> <!-- newPost --!>
@@ -171,16 +175,14 @@ document.addEventListener("DOMContentLoaded", () => {
         imageBase64Input.value = canvas.toDataURL('image/jpeg', 0.9);
 
         // 選んだ画像を確認用に表示する
-        const preview = document.createElement('p');
-        preview.textContent = 'プレビュー：';
-        const confirmCanvas = document.createElement('canvas');
-        canvas.after(preview);
-        preview.after(confirmCanvas);
+        const previews = document.getElementById('previews');
+        const confirmCanvas = document.getElementById('confirmCanvas');
         const maxHeight = 160
         confirmCanvas.height = maxHeight;
         confirmCanvas.width = maxHeight * originalWidth / originalHeight;
         const confirmContext = confirmCanvas.getContext('2d');
         confirmContext.drawImage(image, 0, 0, confirmCanvas.width, confirmCanvas.height);
+        previews.style.display = '';
       };
       image.src = reader.result;
     };
